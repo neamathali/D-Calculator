@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Designer Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #fff;
+        }
+
+        .calculator {
+            background-color: #222;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            width: 320px;
+            padding: 20px;
+        }
+
+        .calculator-display {
+            background: #000;
+            color: #0f0;
+            border: none;
+            border-radius: 10px;
+            font-size: 2rem;
+            padding: 15px;
+            text-align: right;
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 20px;
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .button {
+            background: #444;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 1.5rem;
+            padding: 15px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .button:hover {
+            background: #666;
+        }
+
+        .button.operation {
+            background: #00b4d8;
+        }
+
+        .button.equal {
+            background: #ff5733;
+            grid-column: span 2;
+        }
+
+        .button.clear {
+            background: #d9534f;
+        }
+
+        .button.reset {
+            background: #ffc107;
+            grid-column: span 2;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <input type="text" id="display" class="calculator-display" disabled>
+        <div class="button-grid">
+            <button class="button clear" onclick="clearDisplay()">C</button>
+            <button class="button reset" onclick="resetCalculator()">AC</button>
+            <button class="button operation" onclick="appendOperation('%')">%</button>
+            <button class="button operation" onclick="appendOperation('/')">/</button>
+            
+            <button class="button" onclick="appendNumber(7)">7</button>
+            <button class="button" onclick="appendNumber(8)">8</button>
+            <button class="button" onclick="appendNumber(9)">9</button>
+            <button class="button operation" onclick="appendOperation('*')">*</button>
+            
+            <button class="button" onclick="appendNumber(4)">4</button>
+            <button class="button" onclick="appendNumber(5)">5</button>
+            <button class="button" onclick="appendNumber(6)">6</button>
+            <button class="button operation" onclick="appendOperation('-')">-</button>
+
+            <button class="button" onclick="appendNumber(1)">1</button>
+            <button class="button" onclick="appendNumber(2)">2</button>
+            <button class="button" onclick="appendNumber(3)">3</button>
+            <button class="button operation" onclick="appendOperation('+')">+</button>
+
+            <button class="button" onclick="appendNumber(0)">0</button>
+            <button class="button" onclick="appendDecimal('.')">.</button>
+            <button class="button equal" onclick="calculateResult()">=</button>
+        </div>
+    </div>
+
+    <script>
+        let displayValue = "";
+
+        function clearDisplay() {
+            displayValue = displayValue.slice(0, -1);
+            updateDisplay();
+        }
+
+        function resetCalculator() {
+            displayValue = "";
+            updateDisplay();
+        }
+
+        function appendNumber(number) {
+            displayValue += number;
+            updateDisplay();
+        }
+
+        function appendDecimal(dot) {
+            if (!displayValue.includes(dot)) {
+                displayValue += dot;
+                updateDisplay();
+            }
+        }
+
+        function appendOperation(operation) {
+            if (displayValue !== "" && !isNaN(displayValue.slice(-1))) {
+                displayValue += operation;
+                updateDisplay();
+            }
+        }
+
+        function calculateResult() {
+            try {
+                displayValue = eval(displayValue).toString();
+                updateDisplay();
+            } catch (error) {
+                displayValue = "Error";
+                updateDisplay();
+                setTimeout(resetCalculator, 1500);
+            }
+        }
+
+        function updateDisplay() {
+            document.getElementById("display").value = displayValue;
+        }
+    </script>
+</body>
+</html>
